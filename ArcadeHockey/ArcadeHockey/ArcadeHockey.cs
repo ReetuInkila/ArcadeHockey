@@ -41,7 +41,7 @@ public class ArcadeHockey : PhysicsGame
     {
         MultiSelectWindow alkuValikko = new MultiSelectWindow("SpaceHockey", 
             "Aloita peli", "Lopeta");
-        alkuValikko.AddItemHandler(0, ValitseKenttä);
+        alkuValikko.AddItemHandler(0, ValitseKentta);
         alkuValikko.AddItemHandler(1, Exit);
         Add(alkuValikko);
     }
@@ -50,17 +50,17 @@ public class ArcadeHockey : PhysicsGame
     /// Valikko joka johtaa kenttään ilman esteitä, kenttää jossa laidoissa on piikikkäitä esteitä tai kenttään jossa on palloja.
     /// Jokainen vaihtoehto lisäksi johtaa mailan tyypin valintaan. Lisäksi vaihtoehtona palata aiempaan "käynnistysvalikkoon".
     /// </summary>
-    private void ValitseKenttä()
+    private void ValitseKentta()
     {
-        MultiSelectWindow kentänValinta = new MultiSelectWindow("Valitse Kenttä",
+        MultiSelectWindow kentanValinta = new MultiSelectWindow("Valitse Kenttä",
             "Tyhjä kenttä", "Piikkejä", "Palloja", "Takaisin");
-        kentänValinta.AddItemHandler(0, ValitseTaso);
-        kentänValinta.AddItemHandler(1, LuoEsteet1);
-        kentänValinta.AddItemHandler(1, ValitseTaso);
-        kentänValinta.AddItemHandler(2, LuoEsteet2);
-        kentänValinta.AddItemHandler(2, ValitseTaso);
-        kentänValinta.AddItemHandler(3, LuoAloitusValikko);
-        Add(kentänValinta);
+        kentanValinta.AddItemHandler(0, ValitseTaso);
+        kentanValinta.AddItemHandler(1, LuoEsteet1);
+        kentanValinta.AddItemHandler(1, ValitseTaso);
+        kentanValinta.AddItemHandler(2, LuoEsteet2);
+        kentanValinta.AddItemHandler(2, ValitseTaso);
+        kentanValinta.AddItemHandler(3, LuoAloitusValikko);
+        Add(kentanValinta);
     }
 
 
@@ -75,7 +75,7 @@ public class ArcadeHockey : PhysicsGame
         vaikeustasonValinta.AddItemHandler(0, AloitaPeli1);
         vaikeustasonValinta.AddItemHandler(1, AloitaPeli2);
         vaikeustasonValinta.AddItemHandler(2, AloitaPeli3);
-        vaikeustasonValinta.AddItemHandler(3, ValitseKenttä);
+        vaikeustasonValinta.AddItemHandler(3, ValitseKentta);
         Add(vaikeustasonValinta);
     }
     ///TODO:Kentän esteet taulukoita käyttäen
@@ -287,7 +287,9 @@ public class ArcadeHockey : PhysicsGame
         IntMeter laskuri = new IntMeter(0);
         laskuri.MaxValue = 5;
         Label naytto = new Label();
-        naytto.Image = kuvat[laskuri];
+        ///naytto.Image = kuvat[laskuri];
+        naytto.BindTo(laskuri);
+        naytto.TextColor = Color.Yellow;
         naytto.X = x;
         naytto.Y = y;
         naytto.Height = 60;
@@ -317,7 +319,7 @@ public class ArcadeHockey : PhysicsGame
     /// <summary>
     /// Luodaan mailojen liikuttamiseen näppäimet sekä info ja pelin lopetus näppäin.
     /// </summary>
-    /// TODO:Lopetusnäppäin johtamaan aloitusvalikkoon
+    /// TODO:Lopetusnäppäin johtamaan aloitusvalikkoon ja pelin pysäyttämiseen
     private void AsetaOhjaimet()
     {
         Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, nopeusYlos);
@@ -331,7 +333,7 @@ public class ArcadeHockey : PhysicsGame
         Keyboard.Listen(Key.Down, ButtonState.Released, AsetaNopeus, null, maila2, Vector.Zero);
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
-        Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
+        Keyboard.Listen(Key.Escape, ButtonState.Pressed, LuoAloitusValikko, "Lopeta peli");
 
     }
 /// <summary>
