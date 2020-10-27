@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using Jypeli;
 using Jypeli.Assets;
 using Jypeli.Controls;
@@ -62,7 +63,7 @@ public class ArcadeHockey : PhysicsGame
         kentanValinta.AddItemHandler(3, LuoAloitusValikko);
         Add(kentanValinta);
     }
-
+    
 
     /// <summary>
     /// Valikko joka käynnistää pelin eri nopeuksisilla palloilla. Lisäksi mahdollisuus palata aiempaan 
@@ -161,91 +162,58 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        pallo = new PhysicsObject(30.0, 30.0);
+
+
+        
+
+        
+
+        int kentanLeveys = 930;
+        int kentankorkeus = 690;
+        int seinanPaksuus = 30;
+        int yla = 360;
+        int ala = -250;
+        int kentanKeskiY = (yla + ala) / 2;
+        int kentanKeskiX = 0;
+        int mailan1X = -410;
+        int mailan2X = 410;
+        int pallonHalkaisija = 30;
+        Level.Background.Color = Color.Black;
+
+        pallo = new PhysicsObject(pallonHalkaisija, pallonHalkaisija);
         pallo.Shape = Shape.Circle;
         pallo.Color = Color.Yellow;
-        pallo.X = 0.0;
-        pallo.Y = 50;
+        pallo.X = kentanKeskiX;
+        pallo.Y = kentanKeskiY;
         pallo.Restitution = 1.0;
         pallo.KineticFriction = 0.0;
         pallo.MomentOfInertia = Double.PositiveInfinity;
         AddCollisionHandler(pallo, KasittelePallonTormays);
         Add(pallo);
 
-        maila1 = LuoMaila(Level.Left + 90.0, 50.0);
-        maila2 = LuoMaila(Level.Right - 90.0, 50.0);
+        ylaLaita = LuoSeina(kentanLeveys, seinanPaksuus, 0, yla);
+        alaLaita = LuoSeina(kentanLeveys, seinanPaksuus, 0, ala);
+        PhysicsObject oikealaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Right - 50, ylaLaita.Y - 100);
+        PhysicsObject oikealaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Right - 50, alaLaita.Y + 100);
+        oikeaKeski = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Right - 20, kentanKeskiY);
+        PhysicsObject vasenlaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Left + 50, ylaLaita.Y - 100);
+        PhysicsObject vasenlaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Left + 50, alaLaita.Y + 100);
+        vasenKeski = LuoSeina(seinanPaksuus, kentankorkeus / 3, Level.Left + 20, kentanKeskiY);
 
-        Level.Background.Color = Color.Black;
+        maila1 = LuoMaila(mailan1X, kentanKeskiY);
+        maila2 = LuoMaila(mailan2X, kentanKeskiY);
+    }
 
-        ylaLaita = Level.CreateTopBorder();
-        ylaLaita.Width = 930;
-        ylaLaita.Height = 30;
-        ylaLaita.Y = Level.Top - 40;
-        ylaLaita.Restitution = 1;
-        ylaLaita.KineticFriction = 0;
-        ylaLaita.Color = Color.Red;
-        Add(ylaLaita);
-
-        alaLaita = Level.CreateBottomBorder();
-        alaLaita.Width = 930;
-        alaLaita.Height = 30;
-        alaLaita.Y = Level.Bottom + 150;
-        alaLaita.Restitution = 1;
-        alaLaita.KineticFriction = 0;
-        alaLaita.Color = Color.Red;
-        Add(alaLaita);
-
-        Surface oikealaita1 = new Surface(30, 200);
-        oikealaita1.X = Level.Right - 50;
-        oikealaita1.Y = ylaLaita.Y - 100;
-        oikealaita1.Restitution = 1;
-        oikealaita1.KineticFriction = 0;
-        oikealaita1.Color = Color.Red;
-        Add(oikealaita1);
-
-        Surface oikealaita2 = new Surface(30, 200);
-        oikealaita2.X = Level.Right - 50;
-        oikealaita2.Y = alaLaita.Y + 100;
-        oikealaita2.Restitution = 1;
-        oikealaita2.KineticFriction = 0;
-        oikealaita2.Color = Color.Red;
-        Add(oikealaita2);
-
-        oikeaKeski = Level.CreateRightBorder();
-        oikeaKeski.Height = oikealaita1.Bottom - oikealaita2.Top + 60;
-        oikeaKeski.Width = 30;
-        oikeaKeski.X = Level.Right - 20;
-        oikeaKeski.Y = (oikealaita2.Top + oikealaita1.Bottom) / 2;
-        oikeaKeski.Restitution = 1;
-        oikeaKeski.KineticFriction = 0;
-        oikeaKeski.Color = Color.Red;
-        Add(oikeaKeski);
-
-        Surface vasenlaita1 = new Surface(30, 200);
-        vasenlaita1.X = Level.Left + 50;
-        vasenlaita1.Y = ylaLaita.Y - 100;
-        vasenlaita1.Restitution = 1;
-        vasenlaita1.KineticFriction = 0;
-        vasenlaita1.Color = Color.Red;
-        Add(vasenlaita1);
-
-        Surface vasenlaita2 = new Surface(30, 200);
-        vasenlaita2.X = Level.Left + 50;
-        vasenlaita2.Y = alaLaita.Y + 100;
-        vasenlaita2.Restitution = 1;
-        vasenlaita2.KineticFriction = 0;
-        vasenlaita2.Color = Color.Red;
-        Add(vasenlaita2);
-
-        vasenKeski = Level.CreateLeftBorder();
-        vasenKeski.Height = vasenlaita1.Bottom - vasenlaita2.Top + 60;
-        vasenKeski.Width = 30;
-        vasenKeski.X = Level.Left + 20;
-        vasenKeski.Y = (vasenlaita2.Top + vasenlaita1.Bottom) / 2;
-        vasenKeski.Restitution = 1;
-        vasenKeski.KineticFriction = 0;
-        vasenKeski.Color = Color.Red;
-        Add(vasenKeski);
+    private PhysicsObject LuoSeina(double pituus, double leveys, double sijaintiX, double sijaintiY)
+    {
+        PhysicsObject seina = new Surface(pituus, leveys);
+        seina.X = sijaintiX;
+        seina.Y = sijaintiY;
+        seina.Restitution = 1;
+        seina.KineticFriction = 0;
+        seina.Color = Color.Red;
+        Add(seina);
+        return seina;
     }
 
 
@@ -287,7 +255,7 @@ public class ArcadeHockey : PhysicsGame
         IntMeter laskuri = new IntMeter(0);
         laskuri.MaxValue = 5;
         Label naytto = new Label();
-        ///naytto.Image = kuvat[laskuri];
+        naytto.Image = kuvat[laskuri];
         naytto.BindTo(laskuri);
         naytto.TextColor = Color.Yellow;
         naytto.X = x;
