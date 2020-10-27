@@ -78,6 +78,7 @@ public class ArcadeHockey : PhysicsGame
         vaikeustasonValinta.AddItemHandler(3, ValitseKenttä);
         Add(vaikeustasonValinta);
     }
+    ///TODO:Kentän esteet taulukoita käyttäen
 
     /// <summary>
     /// Luo kentälle valinnan 1 mukaiset esteet.
@@ -95,7 +96,7 @@ public class ArcadeHockey : PhysicsGame
 
     }
 
-
+    ///TODO: Space näppäimen poisto käytöstä aloituslyönnin jälkeen
     /// <summary>
     /// Käynnistää pelin välilyönnillä pallon nopeudella 1
     /// </summary>
@@ -122,22 +123,37 @@ public class ArcadeHockey : PhysicsGame
 
     private void aloitusLyonti1()
     {
-        int suunta = rand.Next(200, 300);
-        Vector impulssi = new Vector(suunta, -suunta);
+        int suuntaX = rand.Next(0, 1);
+        int x = 250;
+        if (suuntaX == 1) x = x * -1;
+        int suuntaY = rand.Next(0, 1);
+        int y = 250;
+        if (suuntaY == 1) y = y * -1;
+        Vector impulssi = new Vector(x, y);
         pallo.Hit(impulssi);
     }
 
     private void aloitusLyonti2()
     {
-        int suunta = rand.Next(300, 400);
-        Vector impulssi = new Vector(suunta, -suunta);
+        int suuntaX = rand.Next(0, 1);
+        int x = 350;
+        if (suuntaX == 1) x = x * -1;
+        int suuntaY = rand.Next(0, 1);
+        int y = 350;
+        if (suuntaY == 1) y = y * -1;
+        Vector impulssi = new Vector(x, y);
         pallo.Hit(impulssi);
     }
 
     private void aloitusLyonti3()
     {
-        int suunta = rand.Next(400, 500);
-        Vector impulssi = new Vector(suunta, -suunta);
+        int suuntaX = rand.Next(0, 1);
+        int x = 450;
+        if (suuntaX == 1) x = x * -1;
+        int suuntaY = rand.Next(0, 1);
+        int y = 450;
+        if (suuntaY == 1) y = y * -1;
+        Vector impulssi = new Vector(x, y);
         pallo.Hit(impulssi);
     }
     /// <summary>
@@ -263,6 +279,8 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="x">pistenäytön x-kordinaatti</param>
     /// <param name="y">pistenäytön y-kordinaatti</param>
     /// <returns>pelaajan pisteemäärää kuvastava näyttö</returns>
+    /// TODO: Pistelaskuri toimimaan!!! 
+    /// TODO:Tapahtumat kun saadaan piste tai kun peli loppuu
     private IntMeter LuoPisteLaskuri(double x, double y)
     {
         Image[] kuvat = LoadImages("Numero0.gif", "Numero1.gif", "Numero2.gif", "Numero3.gif", "Numero4.gif", "Numero5.gif");
@@ -279,7 +297,11 @@ public class ArcadeHockey : PhysicsGame
         Add(naytto);
         return laskuri;
     }
-
+/// <summary>
+/// käy läpi pallon törmäyksiä ja lisää pistelaskurin arvoa maaliin osuessa
+/// </summary>
+/// <param name="pallo">liikkuva kohde</param>
+/// <param name="kohde">kohde jojon törmätään</param>
     private void KasittelePallonTormays(PhysicsObject pallo, PhysicsObject kohde)
     {
         if (kohde == oikeaKeski)
@@ -292,6 +314,10 @@ public class ArcadeHockey : PhysicsGame
         }
     }
 
+    /// <summary>
+    /// Luodaan mailojen liikuttamiseen näppäimet sekä info ja pelin lopetus näppäin.
+    /// </summary>
+    /// TODO:Lopetusnäppäin johtamaan aloitusvalikkoon
     private void AsetaOhjaimet()
     {
         Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, nopeusYlos);
@@ -308,7 +334,11 @@ public class ArcadeHockey : PhysicsGame
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
 
     }
-
+/// <summary>
+/// Pysäyttää mailan kun se on osumassa kentän rajoihin
+/// </summary>
+/// <param name="maila">maila jonka liikkumisnopeutta säädetään</param>
+/// <param name="nopeus">vektori jonta käytetään nopeutena normaalitilanteissa</param>
     private void AsetaNopeus(PhysicsObject maila, Vector nopeus)
     {
         if ((nopeus.Y < 0) && (maila.Bottom < alaLaita.Top))
