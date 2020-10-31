@@ -17,6 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Content\ArcadeFontti.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Content\numero0.gif">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
