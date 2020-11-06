@@ -29,11 +29,6 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     public override void Begin()
     {
-        CollisionShapeParameters parametres = new CollisionShapeParameters();
-        // Parametrien arvot sopiviksi ettei moottoripyörän renkaat mene läpi
-        parametres.DistanceGridSpacing = 3;
-        parametres.MaxVertexDistance = 3;
-
         LuoKentta();
         LuoAloitusValikko();
         LisaaLaskurit();
@@ -54,12 +49,13 @@ public class ArcadeHockey : PhysicsGame
     
     /// <summary>
     /// Valikko joka johtaa kenttään ilman esteitä, kenttää jossa laidoissa on piikikkäitä esteitä tai kenttään jossa on palloja.
-    /// Jokainen vaihtoehto lisäksi johtaa mailan tyypin valintaan. Lisäksi vaihtoehtona palata aiempaan "käynnistysvalikkoon".
+    /// Valikko vie myös vaikeus asteen valinnan valikkoon.
+    ///Lisäksi vaihtoehtona palata aiempaan "käynnistysvalikkoon".
     /// </summary>
     private void ValitseKentta()
     {
         MultiSelectWindow kentanValinta = new MultiSelectWindow("Valitse Kenttä",
-            "Tyhjä kenttä", "Piikkejä", "Palloja", "Takaisin");
+            "Tyhjä kenttä", "Palloja", "Piikkejä", "Takaisin");
         kentanValinta.AddItemHandler(0, ValitseTaso);
         kentanValinta.AddItemHandler(1, LuoEsteet1);
         kentanValinta.AddItemHandler(1, ValitseTaso);
@@ -87,24 +83,49 @@ public class ArcadeHockey : PhysicsGame
     ///TODO:Kentän esteet taulukoita käyttäen
 
     /// <summary>
-    /// Luo kentälle valinnan 1 mukaiset esteet.
+    /// Valinnan 1 mukaiset esteet taulukossa. Kutsuu taulukkoa läpikäyvää aiohjelmaa teeKentta.
     /// </summary>
     private void LuoEsteet1()
     {
         char[,] kentta = {
-                {'p', '.', 'P'},
-                {'.', 'p', '.'},
-                {'.', 'p', '.'},
-                {'p', ' ', 'P'},
+                {'p', '.', '.', '.', '.', '.', '.', '.', 'p'},
+                {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
+                {'.', '.', '.', '.', 'p', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', 'p', '.', '.', '.', '.'},
+                {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                          };
-        TeeKentta(kentta);
+        teeKentta(kentta);
     }
 
-    public void TeeKentta(char[,] kentta)
+    /// <summary>
+    /// Valinnan 2 mukaiset esteet taulukossa. Kutsuu taulukkoa läpikäyvää aiohjelmaa teeKentta.
+    /// </summary>
+    private void LuoEsteet2()
     {
-        int koko = 20;
-        double alkuX = Level.Left;
-        double alkuY = Level.Top;
+        char[,] kentta = {
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', 'k', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
+                         };
+        teeKentta(kentta);
+    }
+
+    /// <summary>
+    /// käy läpi valitun kenttätaulukon alkioita  ja luo p:n paikalle pallon ja k:n paikalle kolmion
+    /// </summary>
+    /// <param name="kentta">valittu kenttä taulukkona</param>
+    public void teeKentta(char[,] kentta)
+    {
+        double kokox = (Level.Right- Level.Left)/9 ;
+        double kokoy = (Level.Top - Level.Bottom - 200) / 7;
+        double alkuX = Level.Left+55;
+        double alkuY = Level.Top - 100;
         double y = alkuY;
         for (int iy = 0; iy < kentta.GetLength(0); iy++)
         {
@@ -116,35 +137,58 @@ public class ArcadeHockey : PhysicsGame
 
                 switch (t)
                 {
-                    case 'P':
-                        LuoPallo(x, y);
+                    case 'p':
+                        estePallo(x, y);
                         break;
                 }
-                x += koko;
+
+                switch (t)
+                {
+                    case 'k':
+                        esteKolmio(x, y);
+                        break;
+                }
+                x += kokox;
             }
-            y -= koko;
+            y -= kokoy;
         }
     }
-
-    private void LuoPallo(double x, double y)
+    /// <summary>
+    /// luo kentän esteenä olevan pallon
+    /// </summary>
+    /// <param name="x">pallon x kordinaatti</param>
+    /// <param name="y">pallon y kordinaatti</param>
+    private void estePallo(double x, double y)
     {
-        int r = 30;
-        PhysicsObject pallo = new PhysicsObject(r, r);
+        int r = 70;
+        PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
         pallo.Shape = Shape.Circle;
         pallo.X = x;
         pallo.Y = y;
         pallo.Restitution = 1;
         pallo.KineticFriction = 0;
-        pallo.Color = Color.Red;
+        pallo.Color = Color.White;
         Add(pallo);
     }
-    /// <summary>
-    /// Luo kentälle valinnan 2 mukaiset esteet.
-    /// </summary>
-    private void LuoEsteet2()
-    {
 
+    /// <summary>
+    /// luo kentän esteenä olevan pallon
+    /// </summary>
+    /// <param name="x">pallon x kordinaatti</param>
+    /// <param name="y">pallon y kordinaatti</param>
+    private void esteKolmio(double x, double y)
+    {
+        int r = 70;
+        PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
+        pallo.Shape = Shape.Triangle;
+        pallo.X = x;
+        pallo.Y = y;
+        pallo.Restitution = 1;
+        pallo.KineticFriction = 0;
+        pallo.Color = Color.White;
+        Add(pallo);
     }
+
 
     ///TODO: Space näppäimen poisto käytöstä aloituslyönnin jälkeen
     /// <summary>
