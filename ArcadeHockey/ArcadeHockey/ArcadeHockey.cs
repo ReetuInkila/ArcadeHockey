@@ -88,7 +88,7 @@ public class ArcadeHockey : PhysicsGame
     private void LuoEsteet1()
     {
         char[,] kentta = {
-                {'p', '.', '.', '.', '.', '.', '.', '.', 'p'},
+                {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                 {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
                 {'.', '.', '.', '.', 'p', '.', '.', '.', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -122,10 +122,10 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="kentta">valittu kenttä taulukkona</param>
     public void teeKentta(char[,] kentta)
     {
-        double kokox = (Level.Right- Level.Left)/9 ;
-        double kokoy = (Level.Top - Level.Bottom - 200) / 7;
-        double alkuX = Level.Left+55;
-        double alkuY = Level.Top - 100;
+        double kokox = 105 ;
+        double kokoy = 91;
+        double alkuX = vasenKeski.X +60;
+        double alkuY = ylaLaita.Y -30;
         double y = alkuY;
         for (int iy = 0; iy < kentta.GetLength(0); iy++)
         {
@@ -160,14 +160,14 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="y">pallon y kordinaatti</param>
     private void estePallo(double x, double y)
     {
-        int r = 70;
+        int r = 50;
         PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
         pallo.Shape = Shape.Circle;
         pallo.X = x;
         pallo.Y = y;
         pallo.Restitution = 1;
         pallo.KineticFriction = 0;
-        pallo.Color = Color.White;
+        pallo.Color = Color.Yellow;
         Add(pallo);
     }
 
@@ -185,7 +185,7 @@ public class ArcadeHockey : PhysicsGame
         pallo.Y = y;
         pallo.Restitution = 1;
         pallo.KineticFriction = 0;
-        pallo.Color = Color.White;
+        pallo.Color = Color.Yellow;
         Add(pallo);
     }
 
@@ -217,10 +217,10 @@ public class ArcadeHockey : PhysicsGame
 
     private void aloitusLyonti1()
     {
-        int suuntaX = rand.Next(0, 1);
+        int suuntaX = rand.Next(0, 3);
         int x = 250;
         if (suuntaX == 1) x = x * -1;
-        int suuntaY = rand.Next(0, 1);
+        int suuntaY = rand.Next(0, 3);
         int y = 250;
         if (suuntaY == 1) y = y * -1;
         Vector impulssi = new Vector(x, y);
@@ -230,10 +230,10 @@ public class ArcadeHockey : PhysicsGame
 
     private void aloitusLyonti2()
     {
-        int suuntaX = rand.Next(0, 1);
+        int suuntaX = rand.Next(0, 3);
         int x = 350;
         if (suuntaX == 1) x = x * -1;
-        int suuntaY = rand.Next(0, 1);
+        int suuntaY = rand.Next(0, 3);
         int y = 350;
         if (suuntaY == 1) y = y * -1;
         Vector impulssi = new Vector(x, y);
@@ -243,10 +243,10 @@ public class ArcadeHockey : PhysicsGame
 
     private void aloitusLyonti3()
     {
-        int suuntaX = rand.Next(0, 1);
+        int suuntaX = rand.Next(0, 3);
         int x = 450;
         if (suuntaX == 1) x = x * -1;
-        int suuntaY = rand.Next(0, 1);
+        int suuntaY = rand.Next(0, 3);
         int y = 450;
         if (suuntaY == 1) y = y * -1;
         Vector impulssi = new Vector(x, y);
@@ -289,6 +289,10 @@ public class ArcadeHockey : PhysicsGame
         maila1 = LuoMaila(mailan1X, kentanKeskiY);
         maila2 = LuoMaila(mailan2X, kentanKeskiY);
     }
+
+    /// <summary>
+    /// Luo pelipallon
+    /// </summary>
     private void luoPallo()
     {
         int yla = 360;
@@ -298,7 +302,7 @@ public class ArcadeHockey : PhysicsGame
         int pallonHalkaisija = 30;
         pallo = new PhysicsObject(pallonHalkaisija, pallonHalkaisija);
         pallo.Shape = Shape.Circle;
-        pallo.Color = Color.Yellow;
+        pallo.Color = Color.Red;
         pallo.X = kentanKeskiX;
         pallo.Y = kentanKeskiY;
         pallo.Restitution = 1.0;
@@ -308,7 +312,15 @@ public class ArcadeHockey : PhysicsGame
         Add(pallo);
         return;
     }
-
+    /// <summary>
+    /// Luo seinän
+    /// </summary>
+    /// <param name="pituus">seinän koko y-suunnassa</param>
+    /// <param name="leveys">seinän koko x-suunnassa</param>
+    /// <param name="sijaintiX">seinän keskipisteen x kordinaatti</param>
+    /// <param name="sijaintiY">seinän keskipisteen x kordinaatti</param>
+    /// <param name="kulma">seinän kulma asteina</param>
+    /// <returns>parametrien mukainen seinä</returns>
     private PhysicsObject LuoSeina(double pituus, double leveys, double sijaintiX, double sijaintiY, int kulma)
     {
         PhysicsObject seina = new Surface(pituus, leveys);
@@ -373,7 +385,11 @@ public class ArcadeHockey : PhysicsGame
         return laskuri;
         
     }
-
+    /// <summary>
+    /// Tapahtumat toisen pelaajan saavuttaessa 5p
+    /// -onnitteluteksti
+    /// -pallon poisto
+    /// </summary>
     private void voitto()
     {
         Label naytto = new Label();
