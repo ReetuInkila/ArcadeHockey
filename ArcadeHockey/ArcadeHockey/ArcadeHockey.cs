@@ -9,8 +9,11 @@ using Microsoft.VisualBasic.FileIO;
 
 public class ArcadeHockey : PhysicsGame
 {
-    private Vector nopeusYlos = new Vector(0, 300);
-    private Vector nopeusAlas = new Vector(0, -300);
+    private const int nopeus = 300;
+    private const int yla = 360;
+    private const int ala = -250;
+
+    private const int seinanPaksuus = 30;
     private PhysicsObject pallo;
     private PhysicsObject maila1;
     private PhysicsObject maila2;
@@ -160,7 +163,7 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="y">pallon y kordinaatti</param>
     private void estePallo(double x, double y)
     {
-        int r = 50;
+        int  r = 50;
         PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
         pallo.Shape = Shape.Circle;
         pallo.X = x;
@@ -179,7 +182,7 @@ public class ArcadeHockey : PhysicsGame
     private void esteKolmio(double x, double y)
     {
         int r = 70;
-        PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
+        PhysicsObject esteKolmio = PhysicsObject.CreateStaticObject(r, r);
         pallo.Shape = Shape.Triangle;
         pallo.X = x;
         pallo.Y = y;
@@ -187,6 +190,11 @@ public class ArcadeHockey : PhysicsGame
         pallo.KineticFriction = 0;
         pallo.Color = Color.Yellow;
         Add(pallo);
+    }
+
+    private void poistaEsteet()
+    {
+        
     }
 
 
@@ -214,7 +222,9 @@ public class ArcadeHockey : PhysicsGame
     {
         Keyboard.Listen(Key.Space, ButtonState.Pressed, aloitusLyonti3, "Aloita");
     }
-
+    /// <summary>
+    /// Arpoo positiivisen/negatiivisen x ja y-suunnan sekä laittaa pallon siihen suuntaan määrätyllä nopeudella
+    /// </summary>
     private void aloitusLyonti1()
     {
         int suuntaX = rand.Next(0, 3);
@@ -227,7 +237,9 @@ public class ArcadeHockey : PhysicsGame
         pallo.Hit(impulssi);
         Keyboard.Disable(Key.Space);
     }
-
+    /// <summary>
+    /// Arpoo positiivisen/negatiivisen x ja y-suunnan sekä laittaa pallon siihen suuntaan määrätyllä nopeudella
+    /// </summary>
     private void aloitusLyonti2()
     {
         int suuntaX = rand.Next(0, 3);
@@ -240,7 +252,9 @@ public class ArcadeHockey : PhysicsGame
         pallo.Hit(impulssi);
         Keyboard.Disable(Key.Space);
     }
-
+    /// <summary>
+    /// Arpoo positiivisen/negatiivisen x ja y-suunnan sekä laittaa pallon siihen suuntaan määrätyllä nopeudella
+    /// </summary>
     private void aloitusLyonti3()
     {
         int suuntaX = rand.Next(0, 3);
@@ -258,17 +272,16 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        int kentanLeveys = 930;
-        int kentankorkeus = 690;
-        int seinanPaksuus = 30;
-        int yla = 360;
-        int ala = -250;
-        int kentanKeskiY = (yla + ala) / 2;
-        int mailan1X = -410;
-        int mailan2X = 410;
-        int kulmaVino1 = 45;
-        int kulmaVino2 = -45;
-        int kulmaSuora = 0;
+        const int kentanLeveys = 930;
+        const int kentankorkeus = 690;
+        
+        
+        const int kentanKeskiY = (yla + ala) / 2;
+        const int mailan1X = -410;
+        const int mailan2X = 410;
+        const int kulmaVino1 = 45;
+        const int kulmaVino2 = -45;
+        const int kulmaSuora = 0;
         Level.Background.Color = Color.Black;
 
         luoPallo();
@@ -295,8 +308,6 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void luoPallo()
     {
-        int yla = 360;
-        int ala = -250;
         int kentanKeskiY = (yla + ala) / 2;
         int kentanKeskiX = 0;
         int pallonHalkaisija = 30;
@@ -433,14 +444,14 @@ public class ArcadeHockey : PhysicsGame
     /// TODO:Lopetusnäppäin johtamaan aloitusvalikkoon ja pelin pysäyttämiseen
     private void AsetaOhjaimet()
     {
-        Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, nopeusYlos);
+        Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, new Vector(0, nopeus));
         Keyboard.Listen(Key.A, ButtonState.Released, AsetaNopeus, null, maila1, Vector.Zero);
-        Keyboard.Listen(Key.Z, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa alas", maila1, nopeusAlas);
+        Keyboard.Listen(Key.Z, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa alas", maila1, new Vector(0, -nopeus));
         Keyboard.Listen(Key.Z, ButtonState.Released, AsetaNopeus, null, maila1, Vector.Zero);
 
-        Keyboard.Listen(Key.Up, ButtonState.Down, AsetaNopeus, "Pelaaja 2: Liikuta mailaa ylös", maila2, nopeusYlos);
+        Keyboard.Listen(Key.Up, ButtonState.Down, AsetaNopeus, "Pelaaja 2: Liikuta mailaa ylös", maila2, new Vector(0, nopeus));
         Keyboard.Listen(Key.Up, ButtonState.Released, AsetaNopeus, null, maila2, Vector.Zero);
-        Keyboard.Listen(Key.Down, ButtonState.Down, AsetaNopeus, "Pelaaja 2: Liikuta mailaa alas", maila2, nopeusAlas);
+        Keyboard.Listen(Key.Down, ButtonState.Down, AsetaNopeus, "Pelaaja 2: Liikuta mailaa alas", maila2, new Vector(0, -nopeus));
         Keyboard.Listen(Key.Down, ButtonState.Released, AsetaNopeus, null, maila2, Vector.Zero);
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
@@ -467,4 +478,6 @@ public class ArcadeHockey : PhysicsGame
 
         maila.Velocity = nopeus;
     }
+
+
 }
