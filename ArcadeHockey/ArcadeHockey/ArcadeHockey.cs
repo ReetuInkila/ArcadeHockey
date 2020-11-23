@@ -410,7 +410,9 @@ public class ArcadeHockey : PhysicsGame
         pelaajan1Pisteet.SetValue(0);
         pelaajan2Pisteet.SetValue(0);
         Remove(naytto);
-        ValitseTaso();
+        Remove(pallo);
+        PeliPallo();
+        Keyboard.Enable(Key.Space);
     }
 
 
