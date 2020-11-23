@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Drawing.Text;
 using Jypeli;
-using Jypeli.Assets;
-using Jypeli.Controls;
-using Jypeli.Widgets;
-using Microsoft.VisualBasic.FileIO;
 
+/// <summary>
+/// @author  Lauri Reetu Taavetti Inkilä
+/// @version 23.11.2020
+/// Ilmakiekko peli 
+/// </summary>
 public class ArcadeHockey : PhysicsGame
 {
-    /// @author  Lauri Reetu Taavetti Inkilä
-    /// @version 23.11.2020
-
     private PhysicsObject pallo;
     private PhysicsObject maila1;
     private PhysicsObject maila2;
