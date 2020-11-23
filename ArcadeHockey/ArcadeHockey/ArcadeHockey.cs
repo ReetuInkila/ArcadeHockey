@@ -189,6 +189,7 @@ public class ArcadeHockey : PhysicsGame
         Add(esteKolmio);
     }
 
+
     /// <summary>
     /// Aloituslyönti välilyönnillä käyttäen aliohjelmaa AloitusLyonti
     /// </summary>
@@ -318,12 +319,12 @@ public class ArcadeHockey : PhysicsGame
     }
 
 
-/// <summary>
-/// luo mailan
-/// </summary>
-/// <param name="x">mailan x-kordinaatti</param>
-/// <param name="y">mailan y-kordinaatti</param>
-/// <returns>ellipsin muotoinen maila</returns>
+    /// <summary>
+    /// luo mailan
+    /// </summary>
+    /// <param name="x">mailan x-kordinaatti</param>
+    /// <param name="y">mailan y-kordinaatti</param>
+    /// <returns>ellipsin muotoinen maila</returns>
     private PhysicsObject LuoMaila(double x, double y)
     {
         PhysicsObject maila = PhysicsObject.CreateStaticObject(30, 100.0);
@@ -348,7 +349,7 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// luo annettuihin kordinaatteihin pistenäytöt
+    /// Luo annettuihin kordinaatteihin pistenäytöt
     /// </summary>
     /// <param name="x">pistenäytön x-kordinaatti</param>
     /// <param name="y">pistenäytön y-kordinaatti</param>
@@ -364,7 +365,7 @@ public class ArcadeHockey : PhysicsGame
         naytto.X = x;
         naytto.Y = y;
         naytto.Height = 60;
-        naytto.Width = 100;
+        naytto.Width = 120;
         naytto.TextColor = Color.Yellow;
         naytto.BorderColor = Color.Yellow;
         naytto.Color = Level.BackgroundColor;
@@ -384,7 +385,7 @@ public class ArcadeHockey : PhysicsGame
         {
             Font = new Font(70),
             X = 0,
-            Y = 130,
+            Y = 310,
             TextColor = Color.Yellow,
             BorderColor = Color.Yellow,
             Text = ("PELI PÄÄTTYI")
@@ -399,7 +400,7 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// Nollaa oiste laskurit ja peli alkaa uudestaan
+    /// Nollaa piste laskurit ja peli alkaa uudestaan
     /// </summary>
     private void UusiPeli(Label naytto)
     {
@@ -435,7 +436,7 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// Luodaan mailojen liikuttamiseen näppäimet sekä info, pallonjumittumisen poisto ja pelin lopetus näppämen.
+    /// Luodaan mailojen liikuttamiseen näppäimet sekä info, pallonjumittumisen poisto ja pelin lopetus näppämet.
     /// </summary>
     private void AsetaOhjaimet()
     {
@@ -480,7 +481,7 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// Liikuttaa mailaa ja sen mailan kun se on osumassa kentän rajoihin
+    /// Liikuttaa mailaa ja mailan kun se on osumassa kentän rajoihin
     /// </summary>
     /// <param name="maila">maila jonka liikkumisnopeutta säädetään</param>
     /// <param name="nopeus">vektori jonta käytetään nopeutena normaalitilanteissa</param>
@@ -498,5 +499,4 @@ public class ArcadeHockey : PhysicsGame
         }
         maila.Velocity = nopeus;
     }
-
 }
