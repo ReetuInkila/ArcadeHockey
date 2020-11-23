@@ -12,8 +12,6 @@ public class ArcadeHockey : PhysicsGame
     /// @author  Lauri Reetu Taavetti Inkilä
     /// @version 23.11.2020
 
-    private const int mailanNopeus = 300;
-    private Label naytto;
     private PhysicsObject pallo;
     private PhysicsObject maila1;
     private PhysicsObject maila2;
@@ -61,9 +59,9 @@ public class ArcadeHockey : PhysicsGame
         MultiSelectWindow kentanValinta = new MultiSelectWindow("Valitse Kenttä",
             "Tyhjä kenttä", "Palloja", "Piikikäs", "Takaisin");
         kentanValinta.AddItemHandler(0, ValitseTaso);
-        kentanValinta.AddItemHandler(1, LuoEsteet1);
+        kentanValinta.AddItemHandler(1, LuoEsteet, 1);
         kentanValinta.AddItemHandler(1, ValitseTaso);
-        kentanValinta.AddItemHandler(2, LuoEsteet2);
+        kentanValinta.AddItemHandler(2, LuoEsteet, 2);
         kentanValinta.AddItemHandler(2, ValitseTaso);
         kentanValinta.AddItemHandler(3, LuoAloitusValikko);
         Add(kentanValinta);
@@ -78,20 +76,21 @@ public class ArcadeHockey : PhysicsGame
     {
         MultiSelectWindow vaikeustasonValinta = new MultiSelectWindow("Vaikeusaste",
             "Taso 1", "Taso 2", "Taso 3", "Palaa");
-        vaikeustasonValinta.AddItemHandler(0, AloitaPeli1);
-        vaikeustasonValinta.AddItemHandler(1, AloitaPeli2);
-        vaikeustasonValinta.AddItemHandler(2, AloitaPeli3);
+        vaikeustasonValinta.AddItemHandler(0, AloitaPeli, 300);
+        vaikeustasonValinta.AddItemHandler(1, AloitaPeli, 400);
+        vaikeustasonValinta.AddItemHandler(2, AloitaPeli, 500);
         vaikeustasonValinta.AddItemHandler(3, ValitseKentta);
         Add(vaikeustasonValinta);
     }
 
 
     /// <summary>
-    /// Valinnan palloja mukaiset esteet taulukossa. Kutsuu taulukkoa läpikäyvää aiohjelmaa TeeKentta.
+    /// kentät taulukoissa joista parametrin mukainen valitaan aliohjelmakutsuun tee kenttä
     /// </summary>
-    private void LuoEsteet1()
+    /// <param name="kentta">valitun kentän numero</param>
+    private void LuoEsteet(int kentta)
     {
-        char[,] kentta = {
+        char[,] kentta1 = {
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                 {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
                 {'.', '.', '.', '.', 'p', '.', '.', '.', '.'},
@@ -100,16 +99,7 @@ public class ArcadeHockey : PhysicsGame
                 {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                          };
-        TeeKentta(kentta);
-    }
-
-
-    /// <summary>
-    /// Valinnan Piikikäs mukaiset esteet taulukossa. Kutsuu taulukkoa läpikäyvää aiohjelmaa TeeKentta.
-    /// </summary>
-    private void LuoEsteet2()
-    {
-        char[,] kentta = {
+        char[,] kentta2 = {
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                 {'.', 'k', '.', '.', 'k', '.', '.', 'k', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
@@ -118,7 +108,8 @@ public class ArcadeHockey : PhysicsGame
                 {'.', 'k', '.', '.', 'k', '.', '.', 'k', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                          };
-        TeeKentta(kentta);
+        if (kentta == 1) TeeKentta(kentta1);
+        if (kentta == 2) TeeKentta(kentta2);
     }
 
 
@@ -198,58 +189,13 @@ public class ArcadeHockey : PhysicsGame
         Add(esteKolmio);
     }
 
-
     /// <summary>
-    /// Käynnistää pelin välilyönnillä pallon nopeudella 1 kutsumalla aliohjelmaa AloitusLyonti1
+    /// Aloituslyönti välilyönnillä käyttäen aliohjelmaa AloitusLyonti
     /// </summary>
-    private void AloitaPeli1()
+    /// <param name="nopeus">pallon nopeutena käytettävä nopeus</param>
+    private void AloitaPeli(int nopeus)
     {
-        Keyboard.Listen(Key.Space, ButtonState.Pressed, AloitusLyonti1, "Aloita");
-    }
-
-
-    /// <summary>
-    /// käynnistää pelin välilyönnillä pallon nopeudella 2 kutsumalla aliohjelmaa AloitusLyonti2
-    /// </summary>
-    private void AloitaPeli2()
-    {
-        Keyboard.Listen(Key.Space, ButtonState.Pressed, AloitusLyonti2, "Aloita");
-    }
-
-
-    /// <summary>
-    /// Käynnistää pelin välilyönnillä nopeudella 3 kutsumalla aliohjelmaa AloitusLyonti3
-    /// </summary>
-    private void AloitaPeli3()
-    {
-        Keyboard.Listen(Key.Space, ButtonState.Pressed, AloitusLyonti3, "Aloita");
-    }
-
-
-    /// <summary>
-    /// Kutsuu aliohjelmaa AloitusLyonti ja vie sille parametrina pallon nopeuden
-    /// </summary>
-    private void AloitusLyonti1()
-    {
-        AloitusLyonti(3);
-    }
-
-
-    /// <summary>
-    /// Kutsuu aliohjelmaa AloitusLyonti ja vie sille parametrina pallon nopeuden
-    /// </summary>
-    private void AloitusLyonti2()
-    {
-        AloitusLyonti(4);
-    }
-
-
-    /// <summary>
-    /// Kutsuu aliohjelmaa AloitusLyonti ja vie sille parametrina pallon nopeuden
-    /// </summary>
-    private void AloitusLyonti3()
-    {
-        AloitusLyonti(5);
+        Keyboard.Listen(Key.Space, ButtonState.Pressed, AloitusLyonti, "Aloita", nopeus);
     }
 
 
@@ -259,8 +205,8 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="vauhti"></param>
     private void AloitusLyonti(int vauhti)
     {
-        int vauhtiY = vauhti * 100;
-        int vauhtiX = vauhti * 100;
+        int vauhtiY = vauhti ;
+        int vauhtiX = vauhti;
         if (ArvoSuunta() == false) vauhtiX *= -1;
         if (ArvoSuunta() == false) vauhtiY *= -1;
         Vector impulssi = new Vector(vauhtiX, vauhtiY);
@@ -423,7 +369,7 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void Voitto()
     {
-        naytto = new Label
+        Label naytto = new Label
         {
             Font = new Font(70),
             X = 0,
@@ -435,7 +381,7 @@ public class ArcadeHockey : PhysicsGame
         Add(naytto);        
         MultiSelectWindow uusiPeli = new MultiSelectWindow("SpaceHockey",
             "Uusi peli", "Lopeta");
-        uusiPeli.AddItemHandler(0, UusiPeli);
+        uusiPeli.AddItemHandler(0, UusiPeli, naytto);
         uusiPeli.AddItemHandler(1, Exit);
         Add(uusiPeli);
     }
@@ -444,7 +390,7 @@ public class ArcadeHockey : PhysicsGame
     /// <summary>
     /// Nollaa oiste laskurit ja peli alkaa uudestaan
     /// </summary>
-    private void UusiPeli()
+    private void UusiPeli(Label naytto)
     {
         pelaajan1Pisteet.SetValue(0);
         pelaajan2Pisteet.SetValue(0);
@@ -482,6 +428,7 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void AsetaOhjaimet()
     {
+        int mailanNopeus = 300;
         Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, new Vector(0, mailanNopeus));
         Keyboard.Listen(Key.A, ButtonState.Released, AsetaNopeus, null, maila1, Vector.Zero);
         Keyboard.Listen(Key.Z, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa alas", maila1, new Vector(0, -mailanNopeus));
@@ -522,7 +469,7 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// Pysäyttää mailan kun se on osumassa kentän rajoihin
+    /// Liikuttaa mailaa ja sen mailan kun se on osumassa kentän rajoihin
     /// </summary>
     /// <param name="maila">maila jonka liikkumisnopeutta säädetään</param>
     /// <param name="nopeus">vektori jonta käytetään nopeutena normaalitilanteissa</param>
