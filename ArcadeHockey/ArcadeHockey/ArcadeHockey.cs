@@ -9,6 +9,9 @@ using Microsoft.VisualBasic.FileIO;
 
 public class ArcadeHockey : PhysicsGame
 {
+    /// @author  Lauri Reetu Taavetti Inkilä
+    /// @version 23.11.2020
+
     private const int mailanNopeus = 300;
     private Label naytto;
     private PhysicsObject pallo;
@@ -435,7 +438,6 @@ public class ArcadeHockey : PhysicsGame
         uusiPeli.AddItemHandler(0, UusiPeli);
         uusiPeli.AddItemHandler(1, Exit);
         Add(uusiPeli);
-        return;
     }
 
 
@@ -447,9 +449,7 @@ public class ArcadeHockey : PhysicsGame
         pelaajan1Pisteet.SetValue(0);
         pelaajan2Pisteet.SetValue(0);
         Remove(naytto);
-        Remove(pallo);
-        Add(pallo);
-        Keyboard.Enable(Key.Space);
+        ValitseTaso();
     }
 
 
@@ -494,7 +494,8 @@ public class ArcadeHockey : PhysicsGame
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
-        Keyboard.Listen(Key.F2, ButtonState.Pressed, PalloJumittui, "Näytä ohjeet");
+        Keyboard.Listen(Key.F2, ButtonState.Pressed, PalloJumittui, "Jumittuiko pallo");
+        Keyboard.Listen(Key.F3, ButtonState.Pressed, PalloKatosi, "Katosiko pallo");
 
     }
 
@@ -504,8 +505,19 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void PalloJumittui()
     {
-        Vector impulssi = new Vector(5, 0);
+        Vector impulssi = new Vector(50, 10);
         pallo.Hit(impulssi);
+    }
+
+
+    /// <summary>
+    /// Poistaa vanhan "karanneen" pallon ja luo uuden
+    /// </summary>
+    private void PalloKatosi()
+    {
+        Remove(pallo);
+        PeliPallo();
+        Keyboard.Enable(Key.Space);
     }
 
 
