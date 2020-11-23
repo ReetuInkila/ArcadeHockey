@@ -119,10 +119,10 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="kentta">valittu kenttä taulukkona</param>
     public void TeeKentta(char[,] kentta)
     {
-        int kokox = 105 ;
-        int kokoy = 91;
-        int alkuX = -420;
-        int alkuY = 330;
+        const int kokox = 105 ;
+        const int kokoy = 91;
+        const int alkuX = -420;
+        const int alkuY = 330;
         int y = alkuY;
         for (int iy = 0; iy < kentta.GetLength(0); iy++)
         {
@@ -159,7 +159,7 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="y">pallon y kordinaatti</param>
     private void EstePallo(double x, double y)
     {
-        int  r = 50;
+        const int r = 50;
         PhysicsObject pallo = PhysicsObject.CreateStaticObject(r, r);
         pallo.Shape = Shape.Circle;
         pallo.X = x;
@@ -177,8 +177,8 @@ public class ArcadeHockey : PhysicsGame
     /// <param name="y">pallon y kordinaatti</param>
     private void EsteKolmio(double x, double y)
     {
-        int leveys = 70;
-        int korkeus = 60;
+        const int leveys = 70;
+        const int korkeus = 60;
         PhysicsObject esteKolmio = PhysicsObject.CreateStaticObject(leveys, korkeus);
         esteKolmio.Shape = Shape.Triangle;
         esteKolmio.X = x;
@@ -201,12 +201,13 @@ public class ArcadeHockey : PhysicsGame
 
 
     /// <summary>
-    /// Kutsuu aliohjelmaa ArvoSuunta joka palauttaa totuusarvon lyönnin x- ja  y- suunnan etumerkistä sekä kohdistaa palloon niiden mukaisen impulssin
+    /// Kutsuu aliohjelmaa ArvoSuunta joka palauttaa totuusarvon lyönnin x- ja  y- suunnan etumerkistä sekä kohdistaa palloon 
+    /// niiden mukaisen impulssin
     /// </summary>
-    /// <param name="vauhti"></param>
+    /// <param name="vauhti">pallon nopeus</param>
     private void AloitusLyonti(int vauhti)
     {
-        int vauhtiY = vauhti ;
+        int vauhtiY = vauhti;
         int vauhtiX = vauhti;
         if (ArvoSuunta() == false) vauhtiX *= -1;
         if (ArvoSuunta() == false) vauhtiY *= -1;
@@ -235,27 +236,29 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        int ylaRaja = 360;
-        int alaRaja = -250;
-        int seinanPaksuus = 30;
-        int oikeaLaitaX = 450;
-        int vasenLaitaX = -450;
-        int oikeaMaaliX = oikeaLaitaX + seinanPaksuus;
-        int vasenMaaliX = vasenLaitaX - seinanPaksuus;
-        int kentanLeveys = 930;
-        int kentankorkeus = 690; 
-        int kentanKeskiY = (ylaRaja + alaRaja) / 2;
-        int mailan1X = -410;
-        int mailan2X = 410;
+        const int ylaRaja = 360;
+        const int alaRaja = -250;
+        const int seinanPaksuus = 30;
+        const int oikeaLaitaX = 450;
+        const int vasenLaitaX = -450;
+        const int oikeaMaaliX = oikeaLaitaX + seinanPaksuus;
+        const int vasenMaaliX = vasenLaitaX - seinanPaksuus;
+        const int kentanLeveys = 930;
+        const int kentankorkeus = 690; 
+        const int kentanKeskiY = (ylaRaja + alaRaja) / 2;
+        const int mailan1X = -410;
+        const int mailan2X = 410;
+        const int paatyYlaY = 300;
+        const int paatyAlaY = 190;
         Level.Background.Color = Color.Black;
 
         ylaLaita = LuoSeina(kentanLeveys, seinanPaksuus, 0, ylaRaja);
         alaLaita = LuoSeina(kentanLeveys, seinanPaksuus, 0, alaRaja);
-        PhysicsObject oikealaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 5, oikeaLaitaX, ylaLaita.Y - 60);
-        PhysicsObject oikealaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 5, oikeaLaitaX, alaLaita.Y + 60);
+        PhysicsObject oikealaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 5, oikeaLaitaX, paatyYlaY);
+        PhysicsObject oikealaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 5, oikeaLaitaX, paatyAlaY);
         oikeaKeski = LuoSeina(seinanPaksuus, 3 * kentankorkeus / 5, oikeaMaaliX, kentanKeskiY);
-        PhysicsObject vasenlaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 5, vasenLaitaX, ylaLaita.Y - 60);
-        PhysicsObject vasenlaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 5, vasenLaitaX, alaLaita.Y + 60);
+        PhysicsObject vasenlaita1 = LuoSeina(seinanPaksuus, kentankorkeus / 5, vasenLaitaX, paatyYlaY);
+        PhysicsObject vasenlaita2 = LuoSeina(seinanPaksuus, kentankorkeus / 5, vasenLaitaX, paatyAlaY);
         vasenKeski = LuoSeina(seinanPaksuus, 3*kentankorkeus / 5, vasenMaaliX, kentanKeskiY);
 
         maila1 = LuoMaila(mailan1X, kentanKeskiY);
@@ -263,15 +266,13 @@ public class ArcadeHockey : PhysicsGame
 
         pallo = PeliPallo();
 
-        Label ohjeet = new Label
-        {
-            Font = new Font(20),
-            X = 0,
-            Y = -300,
-            TextColor = Color.Yellow,
-            BorderColor = Color.Yellow,
-            Text = ("Ohjeet: Paina F1")
-        };
+        Label ohjeet = new Label();
+        ohjeet.Font = new Font(20);
+        ohjeet.X = 0;
+        ohjeet.Y = -300;
+        ohjeet.TextColor = Color.Yellow;
+        ohjeet.BorderColor = Color.Yellow;
+        ohjeet.Text = ("Ohjeet: Paina F1");
         Add(ohjeet);
     }
 
@@ -281,9 +282,9 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private PhysicsObject PeliPallo()
     {
-        int kentanKeskiY = 55;
-        int kentanKeskiX = 0;
-        int pallonHalkaisija = 30;
+        const int kentanKeskiY = 55;
+        const int kentanKeskiX = 0;
+        const int pallonHalkaisija = 30;
         pallo = new PhysicsObject(pallonHalkaisija, pallonHalkaisija);
         pallo.Shape = Shape.Circle;
         pallo.Color = Color.Red;
@@ -343,8 +344,11 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void LisaaLaskurit()
     {
-        pelaajan1Pisteet = LuoPisteLaskuri(- 125.0, Screen.Bottom + 75.0);
-        pelaajan2Pisteet = LuoPisteLaskuri(125.0, Screen.Bottom + 75.0);
+        const int laskuritY = -300;
+        const int laskurit1X = -125;
+        const int laskurit2X = 125;
+        pelaajan1Pisteet = LuoPisteLaskuri(laskurit1X, laskuritY );
+        pelaajan2Pisteet = LuoPisteLaskuri(laskurit2X, laskuritY);
     }
 
 
@@ -381,15 +385,13 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void Voitto()
     {
-        Label naytto = new Label
-        {
-            Font = new Font(70),
-            X = 0,
-            Y = 310,
-            TextColor = Color.Yellow,
-            BorderColor = Color.Yellow,
-            Text = ("PELI PÄÄTTYI")
-        };
+        Label naytto = new Label();
+        naytto.Font = new Font(70);
+        naytto.X = 0;
+        naytto.Y = 310;
+        naytto.TextColor = Color.Yellow;
+        naytto.BorderColor = Color.Yellow;
+        naytto.Text = ("PELI PÄÄTTYI");
         Add(naytto);        
         MultiSelectWindow uusiPeli = new MultiSelectWindow("SpaceHockey",
             "Uusi peli", "Lopeta");
@@ -440,7 +442,7 @@ public class ArcadeHockey : PhysicsGame
     /// </summary>
     private void AsetaOhjaimet()
     {
-        int mailanNopeus = 300;
+        const int mailanNopeus = 300;
         Keyboard.Listen(Key.A, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa ylös", maila1, new Vector(0, mailanNopeus));
         Keyboard.Listen(Key.A, ButtonState.Released, AsetaNopeus, null, maila1, Vector.Zero);
         Keyboard.Listen(Key.Z, ButtonState.Down, AsetaNopeus, "Pelaaja 1: Liikuta mailaa alas", maila1, new Vector(0, -mailanNopeus));
