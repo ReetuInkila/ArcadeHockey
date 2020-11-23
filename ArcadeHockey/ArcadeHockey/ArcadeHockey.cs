@@ -261,6 +261,17 @@ public class ArcadeHockey : PhysicsGame
         maila2 = LuoMaila(mailan2X, kentanKeskiY);
 
         pallo = PeliPallo();
+
+        Label ohjeet = new Label
+        {
+            Font = new Font(20),
+            X = 0,
+            Y = -300,
+            TextColor = Color.Yellow,
+            BorderColor = Color.Yellow,
+            Text = ("Ohjeet: Paina F1")
+        };
+        Add(ohjeet);
     }
 
 
