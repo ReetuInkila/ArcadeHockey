@@ -57,13 +57,13 @@ public class ArcadeHockey : PhysicsGame
     private void ValitseKentta()
     {
         MultiSelectWindow kentanValinta = new MultiSelectWindow("Valitse Kenttä",
-            "Tyhjä kenttä", "Palloja", "Piikikäs", "Takaisin");
+            "Tyhjä kenttä", "Palloja", "Piikikäs", "Lopeta");
         kentanValinta.AddItemHandler(0, ValitseTaso);
         kentanValinta.AddItemHandler(1, LuoEsteet, 1);
         kentanValinta.AddItemHandler(1, ValitseTaso);
         kentanValinta.AddItemHandler(2, LuoEsteet, 2);
         kentanValinta.AddItemHandler(2, ValitseTaso);
-        kentanValinta.AddItemHandler(3, LuoAloitusValikko);
+        kentanValinta.AddItemHandler(3, Exit);
         Add(kentanValinta);
     }
     
@@ -75,11 +75,11 @@ public class ArcadeHockey : PhysicsGame
     private void ValitseTaso()
     {
         MultiSelectWindow vaikeustasonValinta = new MultiSelectWindow("Vaikeusaste",
-            "Taso 1", "Taso 2", "Taso 3", "Palaa");
+            "Taso 1", "Taso 2", "Taso 3", "Lopeta");
         vaikeustasonValinta.AddItemHandler(0, AloitaPeli, 300);
         vaikeustasonValinta.AddItemHandler(1, AloitaPeli, 400);
         vaikeustasonValinta.AddItemHandler(2, AloitaPeli, 500);
-        vaikeustasonValinta.AddItemHandler(3, ValitseKentta);
+        vaikeustasonValinta.AddItemHandler(3, Exit);
         Add(vaikeustasonValinta);
     }
 
@@ -98,7 +98,8 @@ public class ArcadeHockey : PhysicsGame
                 {'.', '.', '.', '.', 'p', '.', '.', '.', '.'},
                 {'.', 'p', '.', '.', '.', '.', '.', 'p', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
-                         };
+                            };
+        
         char[,] kentta2 = {
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                 {'.', 'k', '.', '.', 'k', '.', '.', 'k', '.'},
@@ -107,7 +108,7 @@ public class ArcadeHockey : PhysicsGame
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
                 {'.', 'k', '.', '.', 'k', '.', '.', 'k', '.'},
                 {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
-                         };
+                            };
         if (kentta == 1) TeeKentta(kentta1);
         if (kentta == 2) TeeKentta(kentta2);
     }
@@ -249,7 +250,7 @@ public class ArcadeHockey : PhysicsGame
         const int mailan1X = -410;
         const int mailan2X = 410;
         const int paatyYlaY = 300;
-        const int paatyAlaY = 190;
+        const int paatyAlaY = -190;
         Level.Background.Color = Color.Black;
 
         ylaLaita = LuoSeina(kentanLeveys, seinanPaksuus, 0, ylaRaja);
@@ -364,12 +365,12 @@ public class ArcadeHockey : PhysicsGame
         laskuri.MaxValue = 5;
         laskuri.UpperLimit += Voitto;
         Label naytto = new Label();
-        naytto.Font = new Font(70);
+        naytto.Font = new Font(60);
         naytto.BindTo(laskuri);
         naytto.X = x;
         naytto.Y = y;
         naytto.Height = 60;
-        naytto.Width = 120;
+        naytto.Width = 100;
         naytto.TextColor = Color.Yellow;
         naytto.BorderColor = Color.Yellow;
         naytto.Color = Level.BackgroundColor;
