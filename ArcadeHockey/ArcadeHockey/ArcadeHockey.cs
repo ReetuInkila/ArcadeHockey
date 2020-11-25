@@ -1,9 +1,9 @@
 using System;
 using Jypeli;
 
-/// <summary>
 /// @author  Lauri Reetu Taavetti Inkilä
 /// @version 23.11.2020
+/// <summary>
 /// Ilmakiekko peli 
 /// </summary>
 public class ArcadeHockey : PhysicsGame
@@ -17,7 +17,6 @@ public class ArcadeHockey : PhysicsGame
     private PhysicsObject ylaLaita;
     private IntMeter pelaajan1Pisteet;
     private IntMeter pelaajan2Pisteet;
-
 
     /// <summary>
     /// Luodaan pelin samana pysyvät rakenteet kutsumalla aliohjelmia LuoKentta, LisaaLaskurit ja AsetaOhjaimet 
